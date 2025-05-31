@@ -1,0 +1,51 @@
+#! /bin/sh
+
+# Check whether AIPS is available.
+if test -z "$AIPS_VERSION"; then
+    echo "$0: AIPS Unavailable"
+else
+# Make AIPS data disks and printers available.
+    if test -z "$DADEVS_QUIET"; then
+	DADEVS_QUIET=YES
+	export DADEVS_QUIET
+    fi
+    if test -f $AIPS_VERSION/SYSTEM/UNIX/DADEVS.SH; then
+        . $AIPS_VERSION/SYSTEM/UNIX/DADEVS.SH
+    fi
+    if test -f $AIPS_VERSION/SYSTEM/UNIX/PRDEVS.SH; then
+        . $AIPS_VERSION/SYSTEM/UNIX/PRDEVS.SH
+    fi
+fi
+
+# Make sure Python can find the ObitTalk modules.
+if test -z "$PYTHONPATH"; then
+    PYTHONPATH=$OBIT_ROOT//share/obittalk/python
+else
+    PYTHONPATH=$PYTHONPATH:$OBIT_ROOT//share/obittalk/python
+fi
+
+# Make sure Python can find the Obit modules.
+if test -z "$OBIT_PYTHONPATH"; then
+    OBIT_PYTHONPATH=$OBIT_ROOT//src/Obit/python
+else
+    OBIT_PYTHONPATH=$OBIT_PYTHONPATH:$OBIT_ROOT//src/Obit/python
+fi
+if test -n "${OBIT_PYTHONPATH+set}"; then
+    PYTHONPATH=$PYTHONPATH:$OBIT_PYTHONPATH
+fi
+
+# Run ObitTalk.py for interactive sessions
+PYTHONSTARTUP=$OBIT_ROOT/share/obittalk/python/ObitTalk.py
+export PYTHONPATH PYTHONSTARTUP
+
+# Use distributed or installed python if available, else hope for the best
+if test -x /usr/bin/python; then
+    exec /usr/bin/python "$@"
+else
+    pyth=$(which python)
+    if test -x $pyth; then
+	exec $pyth "$@"
+    else
+	exec python $@
+    fi
+fi

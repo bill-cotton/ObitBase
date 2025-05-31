@@ -1,0 +1,75 @@
+   Installing and running Linux binary distribution of Obit
+
+NOTE: Python 3 upgrade.
+   As of version 610 (Nov. 2019), the Obit python routines should work
+with either python version 2.7 or python 3, whichever is run using
+command "python" (or /usr/bin/python). Part of this upgrade is to
+require some python 3 features (e.g. parentheses in print statements)
+in existing scripts, even using python 2.7.  This was a major revision
+of the python interface and it no longer works with older versions of
+python.  
+   Further, due to gross incompetence on the part of Python Inc., this 
+binary distribution will only work in python 2.7 built with the same
+variant of PyUnicode (UCS4).  An attempt to run with a python2.7 built
+with UCS2 will fail with a complaint about missing
+PyUnicodeUCS4_AsUTF8String.  python 3 should not have this problem.
+There is a script ObitTalk3 which attempt to start ObitTalk using
+python3 if it is in your path with the name "python3".
+
+Python 3 traumas
+   Python 3 has removed or seriously changes many of the most popular
+scripting features of python which may require modification of your
+existing scripts.   Among others these are:
+ 1) print statements need parentheses, e.g. print ("something")
+ 2) function execfile has been deleted.  
+   exec(open('filename.py').read()) seems to work but is not the
+   recommended way by Python Inc.
+ 3) the integer "/" operator now promotes the arguments to float, to
+   get proper (integer) results use "//"
+ 4) strings were removed and replaced with some variant of PyUnicode,
+   this may not bite you but see above.
+ 5) int data types are now long (64 bits)
+ 6) scoping rules have changes and more variables need to be
+   explicitly declares "global".
+ 7) to upgrade to python 3 features using a python 2.7 add the lines
+from __future__ import absolute_import
+from __future__ import print_function
+   to your script.  Sadly the from __future__ import feature does not
+   work for stock market reports.
+
+   The distribution contains a version of _Obit.so,
+ _Obit.cpython-36m-x86_64-linux-gnu.so which is built explicitly for
+ python3.6 but sees to work for later versions as well.  You may have
+ link this file to _Obit.so in the same directory.
+
+1) Unpack the distribution tarball in the directory in which you wish
+   to install it; e.g.
+ > mv obit-distro-1.1.660.tar.gz /home/mydir/obitinstall
+ > cd /home/mydir/obitinstall
+ > tar zxf obit-distro-1.1.660.tar.gz
+
+2) Add the top level distribution to your path:
+ > setenv PATH "/home/mydir/obitinstall/obit-distro-1.1.660/bin:$PATH"
+if you use tcsh or, for bash
+ > PATH="/home/mydir/obitinstall/obit-distro-1.1.660/bin:$PATH"; export PATH
+You may wish to add these to your .cshrc or .profile login files.
+
+3) ObitTalk is the python based user interface, documentation is in
+doc/ObitTalk.pdf.
+
+4) Additional customization is possible using the python file
+dot.obitrc.py renamed to .obitrc.py and placed in your home directory
+($HOME) or in the working directory from which you run ObitTalk.
+This can be used to define the location of AIPS and AIPS data
+directories as well as FITS data directories.  Alternatively, the
+standard AIPS startup scripts will define the AIPS environment.
+
+5) If the host has a version of python in /usr/bin/python, the
+distributed versions of the scripts will use it.  Otherwise 
+/home/mydir/obitinstall/obit-distro-1.1.660/lib/obit/bin/ObitTalk 
+needs to be modified at the end to use an available python.
+
+   NOTE: If you want to run tasks from 31DEC17 or later AIPS, you'll
+need to copy the libraries (lib*.so) from
+$AIPS_ROOT/$AIPS_VERSION/LNX64/LIBR/INTELCMP/ to
+obit-distro-1.1.660/lib/.
