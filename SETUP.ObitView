@@ -23,7 +23,7 @@ sed -i -e 's|-lxmlrpc_xmlparse||g' configure
 sed -i -e 's|-lxmlrpc_xmltok||g' configure
 sed -i -e 's|^#include <xmlrpc_server_abyss.h>||g' ./src/XMLRPCserver.c
 sed -i -e 's|^#include <xmlrpc_server_abyss.h>||g' ./src/XMLRPCTaskMessServer.c
-
+chmod +x configure
 
 PATH=/usr/bin:$PATH
 ### automake et al. look for this...
