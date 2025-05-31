@@ -1,0 +1,120 @@
+             Obit Installation Kit
+
+   This directory contains the Obit source installation kit.  After
+untarring the contents where you would like it installed, the software
+can be built using one of the scripts in subdirectory scripts.
+  scripts/build_with_SSE     Use only SSE vector instructions
+  scripts/build_with_AVX     Use also AVX vector instructions
+  scripts/build_with_AVX2    Use also AVX2 vector instructions
+  scripts/build_with_AVX512  Use also AVX512f vector instructions
+These control which vector instruction set is used in the build.
+These depend on the hardware in the target machine and you would like
+to use the most advanced version that the machine supports.
+Attempting to use an unsupported instruction causes the program to
+crash.  If your machine has a /proc/cpuinfo file, you can test the
+various options (sse, avx, avx2, avx512) by
+% grep avx2 /proc/cpuinfo
+If this produces a blank string, that option is not available.  Every
+interesting computer should have sse and most will have avx.
+
+   The vector instruction set used in one of the
+scripts/build-with... will be written in file VeectorType as 'SSE',
+'AVX', AVX2 or 'AVX512. Alternatively, the instructions used in the
+last build can be seen in src/Obit/src/Makefile.
+
+   This installation should leave executables in the bin directory:
+  bin/ObitTalk  Python command line interface
+  bin/ObitTalk3 Python3 command line interface
+  bin/ObitView  Image viewer
+  bin/ObitMess  Message window GUI (optional)
+
+   There are also script templates in subdirectory scripts that can be
+edited to provide useful functionality, Edit lines marked "EDIT".
+  scripts/SetupObit.csh  Tcsh script defines environment variables.
+                         This adds the bin directory to your path.
+                         Copy, edit to provide details and execute it.
+  scripts/dot.obitrc.py  Obit startup script that tells where various
+                         parts of Obit and AIPS reside.
+                         Copy, edit to provide details and execute it.
+  
+   Various useful make functions:
+   target: Build obit, uses $CPPFLAGS to set AVX flags,
+           scripts/build_with_AVX? better.
+   clean:  Delete the installation products.
+           NOTE: this will also lose any modifications you have made,
+           back them up.
+   update: Use subversion to update the version of Obit, follow this
+           by script/build_with??? to rebuild the software.
+   backup: Makes a gzipped tarball copy of the installation in
+           ../ObitBase_backup.tgz. 
+   distro: Makes binary distribution and tarball in distro, 
+           set $VTYPE to specify the version of the vector set used,
+           e.g. SSE, AVX, AVX2, AVX512
+
+   Local installations of libraries not in the standard places can be
+pointed to by using an environmentalism variable $LOCAL (directory
+containing subdirectories include, lib), also setting $LD_LIBRARY_PATH
+may help. This can be added to scripts/SetupObit.csh (tcsh) (and executing) as
+#  Local Mods
+setenv LOCAL /export/ssd/bcotton/Git/Obit/trunk/other/ 
+setenv CPPFLAGS "-mavx -DHAVE_AVX"
+setenv VTYPE "AVX"
+
+  
+   This installation uses subversion (as svn) to access the Obit
+repository on GitHub for the latest version so you'll need this
+installed.  Several of the more troublesome third party libraries are
+included in this distribution but others will be searched for.  Any
+missing ones may have to be installed if their functionality is
+needed.  Not all are required to build.
+  curl      Network communication
+  fftw3     Fast Fourier Transform package
+  glib-2.0  Gnu library
+  gsl       Gnu Scientific Library
+  motif     X windows widgets for ObitView
+  wvr       ALMA water vapor radiometer library
+  zlib      Read gzip compressed files
+
+Obit Binary Distribution
+------------------------
+   After the main installation has been successfully built, a binary
+distribution can be built in the distro subdirectory using 
+"make bindistro" from the command line.  It will be labeled with the
+Vector type (SSE, AVX, AVX2 or AVX512) from the environment variable
+$VTYPE. This will leave a gzipped tarball in the distro directory.
+NB: Delete the old version before building a newer one.
+May need to set LD_LIBRARY_PATH if it's needed to run.
+
+Troubleshooting:
+---------------
+  If the build fails there will be no executables in directory bin.
+In this case look at src/Obit/config.log which should say which
+external libraries are missing. Also check src/ObitTalk/config.log and 
+src/ObitView/config.log depending on what failed.
+
+  If one or the other of the ObitTalk scripts don't run properly,
+% cd $OBITBASE/src/Obit/python; make Obit
+might fix it.
+
+   Missing header files or libraries can be added to the CFLAGS and/or
+LDFLAGS  in the execution of configure in SETUP.Obit (or
+SETUP.ObitTalk or SETUP.ObitView).  The location can also be
+explicitly given in a "--with-package=/location/of/package/ in the
+configure command; see configure --help" for details.  Alternatively,
+header files and libraries can be added to deps/include and deps/lib
+or in a directory pointed to by $LOCAL.
+
+   Some versions of python3 fail to pick up the correct version of the
+Obit, the symptom is
+Python 3.9.2 (default, Feb 28 2021, 17:03:44)
+...
+    import _Obit
+ImportError: obit/obit-1.1.669/share/python/_Obit.so: undefined symbol: PyInstance_Type
+
+There are two _Obit*.so libraries:
+_Obit.so                               for python2
+_Obit.cpython-36m-x86_64-linux-gnu.so  for python3
+If you python is python3 (above example is python3.9.2), then renaming 
+_Obit.cpython-36m-x86_64-linux-gnu.so to _Obit.so may fix the problem.
+
+W. Cotton (bcotton@nrao.edu) Oct 2023

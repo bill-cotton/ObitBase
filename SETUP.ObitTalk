@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export VERSION=`cat src/ObitVersion | egrep '^[0-9]' | tail -1 | sed -e 's/^\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/'`
+export majorversion=`echo $VERSION | sed -e "s/^\([0-9][0-9]*\)\..*/\1/"`
+export minorversion=`echo $VERSION | sed -e "s/^[0-9][0-9]*\.\([0-9][0-9]*\)\..*/\1/"`
+echo "VERSION:        $VERSION"
+echo "majorversion:   $majorversion"
+echo "minorversion:   $minorversion"
+echo "SO Version:     $majorversion.$minorversion"
+
+export prefix=`pwd`
+export deps=${prefix}/deps
+
+#rm -rf ObitTalk
+#tar zxf ObitTalk.tar.gz
+export OBITSYSTEMPATH=`cd src && pwd`
+export OBIT=${OBITSYSTEMPATH}/Obit
+# LD_LIBRARY_PATH cripples python here
+export LD_LIBRARY_PATH=""
+echo "LD_LIBRARY_PATH $LD_LIBRARY_PATH"
+pushd src/ObitTalk
+PATH=/usr/bin:$PATH
+### automake et al. look for this...
+echo '#/bin/sh' > missing && echo 'exit 0' >> missing
+export PYTHONPATH=${OBIT}/python
+export LD_LIBRARY_PATH="${deps}/lib:$LD_LIBRARY_PATH" 
+CFLAGS="-I/usr/lib64/glib-2.0/include -I${deps}/include -I${OBIT}/include -I../Obit/include" LDFLAGS="-L${deps}/lib -L${OBIT}/lib -Wl,-rpath,${prefix}/lib:${deps}/lib:${OBIT}/lib" CURL_CFLAGS="-I/usr/include/curl" ./configure --with-plplot=${deps} --with-xmlrpc=${deps} --with-xmlrpc-includes=${deps}/include --enable-shared --prefix=${prefix} --libdir=${prefix}/lib --with-obit=${OBIT}
+make clean all install
+make install
+popd

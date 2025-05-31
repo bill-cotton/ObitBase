@@ -1,0 +1,35 @@
+#!/bin/bash
+
+export VERSION=`cat src/ObitVersion | egrep '^[0-9]' | tail -1 | sed -e 's/^\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/'`
+export majorversion=`echo $VERSION | sed -e "s/^\([0-9][0-9]*\)\..*/\1/"`
+export minorversion=`echo $VERSION | sed -e "s/^[0-9][0-9]*\.\([0-9][0-9]*\)\..*/\1/"`
+echo "VERSION:        $VERSION"
+echo "majorversion:   $majorversion"
+echo "minorversion:   $minorversion"
+echo "SO Version:     $majorversion.$minorversion"
+
+export prefix=`pwd`
+export deps=${prefix}/deps
+
+#rm -rf ObitView
+#tar zxf ObitView.tar.gz
+export OBITSYSTEMPATH=`cd src && pwd`
+export OBIT=${OBITSYSTEMPATH}/Obit
+
+pushd src/ObitView
+# Hack configure to include plplot
+sed -i -e 's#-lObit# -lObit -lplplot#g' configure
+sed -i -e 's|-lxmlrpc_xmlparse||g' configure
+sed -i -e 's|-lxmlrpc_xmltok||g' configure
+sed -i -e 's|^#include <xmlrpc_server_abyss.h>||g' ./src/XMLRPCserver.c
+sed -i -e 's|^#include <xmlrpc_server_abyss.h>||g' ./src/XMLRPCTaskMessServer.c
+
+
+PATH=/usr/bin:$PATH
+### automake et al. look for this...
+echo '#/bin/sh' > missing && echo 'exit 0' >> missing
+CFLAGS="-I/usr/lib64/glib-2.0/include -I${deps}/include -I${OBIT}/include" LDFLAGS="-L${deps}/lib -L${OBIT}/lib -L/usr/lib64 -Wl,-rpath,${prefix}/lib:${deps}/lib:${OBIT}/lib -lpng -lxmlrpc_server -lxmlrpc_abyss -lxml2 -lgfortran" CURL_CFLAGS=-I/usr/include/curl ./configure  --with-plplot=${deps} --with-xmlrpc=${deps} --with-xmlrpc-includes=${deps}/include --with-cfitsio=${deps} --enable-shared --prefix=${prefix} --libdir=${prefix}/lib
+make clean all
+cp ObitView ${prefix}/bin
+cp ObitMess ${prefix}/bin
+popd

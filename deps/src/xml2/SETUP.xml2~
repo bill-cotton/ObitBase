@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export prefix=`cd ../.. && pwd`
+rm -rf libxml2-2.9.10
+tar zxf libxml2-2.9.10.tar.gz
+pushd libxml2-2.9.10
+export PYTHON_SITE_PACKAGES =/dev/null
+echo '#!/bin/bash' > bindings/tcl/pltclgen
+./configure --prefix=${prefix} -with-python-install-dir=${prefix}/lib
+make VERBOSE=1
+echo "---------------------------------------------------------------------------"
+make install

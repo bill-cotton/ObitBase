@@ -1,0 +1,20 @@
+--- plplot-5.7.2/examples/tk/Makefile.examples.in.multilib	2007-01-21 17:46:03.000000000 -0700
++++ plplot-5.7.2/examples/tk/Makefile.examples.in	2007-02-12 14:01:06.000000000 -0700
+@@ -24,8 +24,6 @@
+ EXEEXT = @EXEEXT@
+ 
+ @pkg_config_true@LIB_TAG = @LIB_TAG@
+-@pkg_config_true@PKG_CONFIG_ENV = @PKG_CONFIG_ENV@
+-@pkg_config_true@RPATHCMD = @RPATHCMD@
+ 
+ EXECUTABLES_list = \
+ 		 xtk01$(EXEEXT) \
+@@ -38,7 +36,7 @@
+ 	rm -f $(EXECUTABLES_list)
+ 
+ .c$(EXEEXT):
+-@pkg_config_true@	$(CC) $< -o $@ $(RPATHCMD) `$(PKG_CONFIG_ENV) pkg-config --cflags --libs plplot$(LIB_TAG)-tcl`
++@pkg_config_true@	$(CC) $< -o $@ `pkg-config --cflags --libs plplot$(LIB_TAG)-tcl`
+ @pkg_config_false@	$(CC) $< -o $@ `plplot-config --cflags --libs --with-tcl`
+ 
+ .SUFFIXES: .c $(EXEEXT)

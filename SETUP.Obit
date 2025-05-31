@@ -1,0 +1,38 @@
+#!/bin/bash
+
+export VERSION=`cat src/ObitVersion | egrep '^[0-9]' | tail -1 | sed -e 's/^\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/'`
+export majorversion=`echo $VERSION | sed -e "s/^\([0-9][0-9]*\)\..*/\1/"`
+export minorversion=`echo $VERSION | sed -e "s/^[0-9][0-9]*\.\([0-9][0-9]*\)\..*/\1/"`
+echo "VERSION:        $VERSION"
+echo "majorversion:   $majorversion"
+echo "minorversion:   $minorversion"
+echo "SO Version:     $majorversion.$minorversion"
+export prefix=`pwd`
+export deps=${prefix}/deps
+#rm -rf Obit
+#tar zxf Obit.tar.gz
+export OBITSYSTEMPATH=`cd src && pwd`
+# LD_LIBRARY_PATH cripples python here
+export LD_LIBRARY_PATH=""
+pushd src/Obit
+cp AIPS/ZOINTD.c src
+sed -i -e 's/@@VER@@/${VERSION}/g' lib/Makefile
+sed -i -e 's/@@SOVER@@/${majorversion}.${minorversion}/g' lib/Makefile
+sed -i -e 's|^#include <xmlrpc_server_abyss.h>||g' include/ObitRPC.h
+PATH=/usr/bin:$PATH
+export OBIT=`pwd`
+export RANLIB=`ranlib`
+### automake et al. look for this...
+echo '#/bin/sh' > missing && echo 'exit 0' >> missing
+echo "deps ${deps}"
+CFLAGS="-I${deps}/include -I${deps}/include/glib-2.0 -I${deps}/include/glib-2.0/include -I${OBIT}/include -I${LOCAL}/include "  LDFLAGS="-L${deps}/lib -L${OBIT}/lib -L${LOCAL}/lib -L/usr/lib64 -Wl,-rpath,${prefix}/lib:${deps}/lib:${OBIT}/lib -lpng -lxmlrpc_server -lxmlrpc_client -lxmlrpc_server_abyss -lxmlrpc_xmlparse -lxmlrpc_xmltok -lxmlrpc_util -lxmlrpc_abyss -lxml2 -lcfitsio -lxmlrpc -lxmlrpc_util" CURL_CFLAGS=-I/usr/include/curl ./configure --with-plplot=${deps} --with-xmlrpc=${deps} --with-xmlrpc-includes=${deps}/include --with-cfitsio=${deps} --with-glib=${deps} --with-glib-includes=${deps}/include/glib-2.0 --with-wvr=/export/ssd/bcotton/Git/Obit/trunk/other/ --enable-shared --prefix=${prefix} --libdir=${prefix}/lib
+#--with-wvr=/export/ssd/bcotton/Git/Obit/trunk/other/ 
+#make clean all
+# Dynamic Obit library
+make clean versionupdate 
+make srcupdate
+cd lib;make share; cd ..
+sed -i -e 's#LIBS = ../lib/libObit.a#LIBS = -lObit#g' tasks/Makefile
+sed -i -e 's#../lib/libObit.a# #g' tasks/Makefile
+make taskupdate # done later? pythonupdate
+popd

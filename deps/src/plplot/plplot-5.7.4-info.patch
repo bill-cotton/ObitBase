@@ -1,0 +1,13 @@
+--- plplot-5.7.4/doc/docbook/src/plplotdoc.info.orig	2007-08-13 18:37:14.000000000 -0600
++++ plplot-5.7.4/doc/docbook/src/plplotdoc.info	2007-08-14 10:10:57.000000000 -0600
+@@ -3,8 +3,9 @@
+ produced by makeinfo version 4.8 from
+ /tmp/plplot-dist-prep/build_dir/doc/docbook/src/plplotdoc.texi.
+ 
++INFO-DIR-SECTION Scientific Visualization
+ START-INFO-DIR-ENTRY
+-* The PLplot Plotting Library: .   The PLplot Plotting Library
++* PLplot: (plplotdoc).               The PLplot Plotting Library.
+ END-INFO-DIR-ENTRY
+ 
+ 

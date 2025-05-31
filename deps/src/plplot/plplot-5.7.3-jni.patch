@@ -1,0 +1,11 @@
+--- plplot-5.7.3/cmake/modules/java.cmake.jni	2007-03-25 18:41:53.000000000 -0600
++++ plplot-5.7.3/cmake/modules/java.cmake	2007-03-26 11:41:54.000000000 -0600
+@@ -71,7 +71,7 @@
+   set(JAR_DIR ${CMAKE_INSTALL_DATADIR}/java)
+   get_filename_component(JAVADATA_HARDDIR ${JAR_DIR} ABSOLUTE)
+   # JNI .so files.
+-  set(JAVAWRAPPER_DIR ${LIB_DIR}/jni)
++  set(JAVAWRAPPER_DIR ${LIB_DIR}/plplot@VERSION@)
+   get_filename_component(JAVAWRAPPER_HARDDIR ${JAVAWRAPPER_DIR} ABSOLUTE)
+   # Library name suffix is system dependent.  Tests have shown
+   # that ${CMAKE_SHARED_LIBRARY_SUFFIX} gives the correct suffix on both

@@ -1,0 +1,13 @@
+#!/bin/bash
+# Build selected dependencies
+
+export prefix=`pwd`
+export deps=${prefix}/deps
+
+pushd src/Obit
+cd ${deps}/src/plplot; ./SETUP.plplot
+cd ${deps}/src/xmlrpc; ./SETUP.xmlrpc
+cd ${deps}/src/cfitsio; ./SETUP.cfitsio
+cd ${deps}/src/xml2; ./SETUP.xml2
+cd ${deps}/src/curl; ./SETUP.curl
+popd

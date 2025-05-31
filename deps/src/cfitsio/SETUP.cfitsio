@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export prefix=`cd ../.. && pwd`
+rm -rf cfitsio-4.1.0
+tar zxf cfitsio-4.1.0.tar.gz
+pushd cfitsio-4.1.0
+
+echo '#!/bin/bash' > bindings/tcl/pltclgen
+./configure --prefix=${prefix} 
+make VERBOSE=1
+echo "---------------------------------------------------------------------------"
+make install
+make clean

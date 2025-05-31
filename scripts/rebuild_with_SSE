@@ -1,0 +1,9 @@
+#!/bin/sh
+# Build third party software
+#make dodeps
+# Build Obit with SSE vector instructions
+CPPFLAGS=" -msse -DHAVE_SSE=1 "; export CPPFLAGS
+VTYPE="SSE"; export VTYPE
+echo $CPPFLAGS $VTYPE
+echo $VTYPE>VectorType
+make rebuild

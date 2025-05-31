@@ -1,0 +1,9 @@
+#!/bin/sh
+# Build third party software
+#make dodeps
+# Build Obit with AVX512 (and earlier) vector instructions
+CPPFLAGS="-mavx -DHAVE_AVX -mavx2 -DHAVE_AVX2=1 -mavx512f -DHAVE_AVX512"; export CPPFLAGS
+VTYPE="AVX512"; export VTYPE
+echo $CPPFLAGS $VTYPE
+echo $VTYPE>VectorType
+make rebuild

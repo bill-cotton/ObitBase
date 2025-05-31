@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export prefix=`cd ../.. && pwd`
+rm -rf plplot-5.8.0
+tar zxf plplot-5.8.0.tar.gz
+pushd plplot-5.8.0
+patch -p1 < ../plplot-5.7.4-info.patch
+patch -p1 < ../plplot-5.7.2-multilib.patch
+patch -p1 < ../plplot-5.7.3-jni.patch
+
+echo '#!/bin/bash' > bindings/tcl/pltclgen
+./configure --prefix=${prefix} --disable-java --disable-f77 --disable-f95 --disable-python --disable-tcl --disable-tk --disable-perl --without-double --without-qhull
+make VERBOSE=1
+echo "---------------------------------------------------------------------------"
+make install

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export prefix=`cd ../.. && pwd`
+rm -rf xmlrpc-c
+tar zxf xmlrpc_1.59.1.tgz
+pushd xmlrpc-c
+
+echo '#!/bin/bash' > bindings/tcl/pltclgen
+./configure --prefix=${prefix} 
+make VERBOSE=1
+echo "---------------------------------------------------------------------------"
+make install

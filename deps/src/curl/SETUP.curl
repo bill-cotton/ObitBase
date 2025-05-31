@@ -1,0 +1,14 @@
+#!/bin/bash
+
+export prefix=`cd ../.. && pwd`
+rm -rf curl-7.20.1
+tar zxf curl-7.20.1.tar.gz
+pushd curl-7.20.1
+
+echo '#!/bin/bash' > bindings/tcl/pltclgen
+echo $prefix
+./configure --prefix=${prefix} 
+make VERBOSE=1
+echo "---------------------------------------------------------------------------"
+make install
+make clean
