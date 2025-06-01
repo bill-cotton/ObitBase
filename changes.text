@@ -49,7 +49,7 @@ cd $OBITBASE; git add changes.text
 cd $OBITBASE
 git commit -F changes
 git push -v -f ObitBase master
-# Have to force the piece of shit
+# May have to force
 
 # Update local version
 cd $OBITBASE; git pull origin master
