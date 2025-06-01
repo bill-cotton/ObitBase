@@ -1,0 +1,59 @@
+Summary:
+   Initial installation
+
+setenv OBITBASE /export/ssd/bcotton/Git/ObitBase
+setenv GitObitBase /export/raid_2/bcotton/ObitGitMaster/ObitBase
+cd $OBITBASE; /bin/cp -p  README Makefile doDistro.py $GitObitBase
+cd $GitObitBase ; git add README Makefile doDistro.py
+cd $GitObitBase ; git add SETUP.deps SETUP.Obit SETUP.ObitTalk SETUP.ObitView
+cd $GitObitBase/bin ; git add Makefile
+cd $GitObitBase/copyFiles ; git add readme dot.obitrc_bin.py dot.obitrc.py ObitTalk ObitTalk3
+cd $GitObitBase/FITS ; git add 3C196_SBand.fits.gz
+cd $GitObitBase/scripts ; git add build_with_SSE build_with_AVX build_with_AVX2 build_with_AVX512
+cd $GitObitBase/scripts ; git add rebuild_with_SSE rebuild_with_AVX rebuild_with_AVX2 rebuild_with_AVX512
+cd $GitObitBase/share ; git add share.tgz
+cd $GitObitBase/template ; git add template.tgz
+cd $GitObitBase/deps/src/cfitsio ; git add *
+cd $GitObitBase/deps/src/plplot ; git add *
+cd $GitObitBase/deps/src/curl ; git add *
+cd $GitObitBase/deps/src/xml2 ; git add *
+cd $GitObitBase/deps/src/xmlrpc ; git add *
+31 Mar 2025
+
+Summary:
+   
+
+setenv OBITBASE /export/ssd/bcotton/Git/ObitBase
+setenv GitObitBase /export/raid_2/bcotton/ObitGitMaster/ObitBase
+cd $OBITBASE; /bin/cp -p .gitignore  $GitObitBase
+cd $GitObitBase ; git add .gitignore 
+31 Mar 2025
+
+Summary:  Update description of libraries needed
+cd $OBITBASE; /bin/cp -p changes.text $GitObitBase
+cd $OBITBASE; git add changes.text 
+cd $OBITBASE; /bin/cp -p README LibrariesNeeded.text $GitObitBase
+cd $OBITBASE ; git add README LibrariesNeeded.text
+01 Jun 2025
+
+# Maintain github repository directly out of $OBITBASE
+# but maintain a copy in $GitObitBase
+cd $OBITBASE; /bin/cp -p changes.text $GitObitBase
+cd $OBITBASE; git add changes.text 
+#cd $OBITBASE; /bin/cp -p  $GitObitBase
+#cd $OBITBASE; git add
+
+# Edit $OBITBASE/changes
+  
+# Push commits to github
+cd $OBITBASE
+git commit -F changes
+git push -v -f ObitBase master
+# Have to force the piece of shit
+
+# Update local version
+cd $OBITBASE; git pull origin master
+
+# To create a local copy
+git clone https://github.com/bill-cotton/ObitBase/
+  

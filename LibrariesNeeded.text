@@ -1,0 +1,39 @@
+       Software and libraries needed to build Obit
+
+Software needed:
+gcc, g++, gfortran
+
+   A number of critical libraries are included in the ObitBase
+distribution and built as part of the installation.  These are under
+the deps directory.
+Included packages:
+  cfitsio  FITS format I/O 
+  curl     Network communication
+  plplot   Plotting package
+  xml2     XML package
+  xmlrpc   Interprocess communication via the xml/rpc protocol
+Major packages (devel version) not included
+  fftw3     Fast Fourier Transform package
+  glib-2.0  Gnu library
+  gsl       Gnu Scientific Library (including blas)
+  motif     X windows widgets
+  almawvr   ALMA water vapor radiometer library (libair)
+  zlib      Read gzip compressed files
+
+Additional Libraries likely needed:
+gd-devel, libair, libair-devel, opensgmls, pango, pango-devel, 
+pangotf2, python3, python3-devel, wish, wxwidgets
+
+ld-linux-x86-64, libbz2, libc, libcd, libcd-devel
+libcom_err, libcrypt, libcrypto, libcsirocsa, libdl
+libfreebl3, libfreetype, libgfortran, libgcc_s
+libgnomeui, libgnomeprintui, libgssapi_krb5
+libjpeg, libk5crypto, libkeyutils, libkrb5, libkrb5support
+liblber-2.4, libldap-2.4, liblzma, libm, libmd, libnspr4
+libnss3, libnssutil3, libpcre, libplc4, libplds4, libpng
+libpthread, libpython3.X, libresolv, librt, libquadmath
+libsasl2, libsatlas, libselinux, libsmime3, libssl, libssl3
+libtinfo, libutil, libxml2, libXm, libXp
+
+
+

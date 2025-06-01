@@ -81,6 +81,8 @@ Major packages not included
   motif     X windows widgets for ObitView
   wvr       ALMA water vapor radiometer library
   zlib      Read gzip compressed files
+A more detailed list of software and libraries that might be needed is
+given in LibrariesNeeded.text.
 
 Obit Binary Distribution
 ------------------------
