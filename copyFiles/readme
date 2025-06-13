@@ -44,14 +44,14 @@ from __future__ import print_function
 
 1) Unpack the distribution tarball in the directory in which you wish
    to install it; e.g.
- > mv obit-distro-1.1.660.tar.gz /home/mydir/obitinstall
+ > mv obit-distro-1.1.670.tar.gz /home/mydir/obitinstall
  > cd /home/mydir/obitinstall
- > tar zxf obit-distro-1.1.660.tar.gz
+ > tar zxf obit-distro-1.1.670.tar.gz
 
 2) Add the top level distribution to your path:
- > setenv PATH "/home/mydir/obitinstall/obit-distro-1.1.660/bin:$PATH"
+ > setenv PATH "/home/mydir/obitinstall/obit-distro-1.1.670/bin:$PATH"
 if you use tcsh or, for bash
- > PATH="/home/mydir/obitinstall/obit-distro-1.1.660/bin:$PATH"; export PATH
+ > PATH="/home/mydir/obitinstall/obit-distro-1.1.670/bin:$PATH"; export PATH
 You may wish to add these to your .cshrc or .profile login files.
 
 3) ObitTalk is the python based user interface, documentation is in
@@ -66,10 +66,10 @@ standard AIPS startup scripts will define the AIPS environment.
 
 5) If the host has a version of python in /usr/bin/python, the
 distributed versions of the scripts will use it.  Otherwise 
-/home/mydir/obitinstall/obit-distro-1.1.660/lib/obit/bin/ObitTalk 
+/home/mydir/obitinstall/obit-distro-1.1.670/lib/obit/bin/ObitTalk 
 needs to be modified at the end to use an available python.
 
    NOTE: If you want to run tasks from 31DEC17 or later AIPS, you'll
 need to copy the libraries (lib*.so) from
 $AIPS_ROOT/$AIPS_VERSION/LNX64/LIBR/INTELCMP/ to
-obit-distro-1.1.660/lib/.
+obit-distro-1.1.667/lib/.

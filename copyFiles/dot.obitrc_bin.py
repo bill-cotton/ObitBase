@@ -9,7 +9,7 @@ AIPS_VERSION = "31DEC24/"                       # ***EDIT***
 DA00         = "/home/bcotton/AIPS/DATA/DA00/"  # ***EDIT***
 # Define OBIT_EXEC for access to Obit Software 
 OBIT_EXEC    = None  # (def /usr/lib/obit/bin)
-OBIT_EXEC    = "/export/home/leopard/bcotton/ObitWork/ObitBase/src/Obit/distro/obit-distro-1.1.669/lib/Obit/" # ***EDIT***
+OBIT_EXEC    = "/export/home/leopard/bcotton/ObitWork/ObitBase/src/Obit/distro/obit-distro-1.1.670/lib/Obit/" # ***EDIT***
 
 # Define AIPS directories (URL, disk name)
 # URL = None for local disks

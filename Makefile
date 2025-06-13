@@ -34,7 +34,7 @@
 # Svn revision number, also fix readme, dot.obitrc_bin.py and dot.obitrc.py in copyFiles
 #set CPPFLAGS to set avx, e.g. setenv CPPFLAGS "-mavx -DHAVE_AVX=1" 
 # for distro set VTYPE to SSE, AVX, AVX2, AVX512
-ver = 669
+ver = 670
 vtype = $(VTYPE)
 disTarget := "Obit.$(VTYPE)-distro-1.1.$(ver).tar"
 all: dodeps target

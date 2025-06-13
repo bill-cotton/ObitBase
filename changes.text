@@ -48,8 +48,8 @@ cd $OBITBASE; git add changes.text
 # Push commits to github
 cd $OBITBASE
 git commit -F changes
-git push -v -f ObitBase master
-# May have to force
+git push -v ObitBase master
+# May have to force: git push -v -f ObitBase master
 
 # Update local version
 cd $OBITBASE; git pull origin master
@@ -57,3 +57,11 @@ cd $OBITBASE; git pull origin master
 # To create a local copy
 git clone https://github.com/bill-cotton/ObitBase/
   
+13 June 2025
+Summary:  Update Obit Version
+cd $OBITBASE; git add changes.text 
+cd $OBITBASE; git add Makefile copyFiles/readme copyFiles/dot.obitrc.py copyFiles/dot.obitrc_bin.py 
+cd $OBITBASE;
+# Update changes
+git commit -F changes
+git push -v ObitBase master
