@@ -65,3 +65,22 @@ cd $OBITBASE;
 # Update changes
 git commit -F changes
 git push -v ObitBase master
+# Update local version
+cd $OBITBASE; git pull origin master
+
+
+07 July 2025
+Summary: Add -lm to tasks/Makefile.in
+cd $OBITBASE; git add changes.text 
+cd $OBITBASE; git add src/Obit/tasks/Makefile.in
+# Update changes
+git commit -F changes
+git push -v ObitBase master
+# Update local version
+cd $OBITBASE; git pull origin master
+
+
+07 July 2025
+Summary: Add -lm to tasks/Makefile.in
+cd $OBITBASE; git add changes.text 
+cd $OBITBASE; git add src/Obit/tasks/Makefile.in
