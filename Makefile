@@ -34,7 +34,7 @@
 # Svn revision number, also fix readme, dot.obitrc_bin.py and dot.obitrc.py in copyFiles
 #set CPPFLAGS to set avx, e.g. setenv CPPFLAGS "-mavx -DHAVE_AVX=1" 
 # for distro set VTYPE to SSE, AVX, AVX2, AVX512
-ver = 670
+ver = 672
 vtype = $(VTYPE)
 disTarget := "Obit.$(VTYPE)-distro-1.1.$(ver).tar"
 all: dodeps target
@@ -56,7 +56,12 @@ target:
 	export LD_LIBRARY_PATH="";git clone https://github.com/bill-cotton/Obit src
 	mv src/ObitSystem/* src
 	rm -rf src/other
+	/bin/cp -p fixed/configure.Obit src/Obit/configure
 	/bin/cp -p fixed/configure.ObitView src/ObitView/configure
+	/bin/cp -p fixed/Makefile.in.Obit.tasks src/Obit/tasks/Makefile.in
+	/bin/cp -p fixed/Makefile.in.ObitView.tasks src/ObitView/Makefile.in
+	/bin/cp -p fixed/Makefile.in.ObitView.src src/ObitView/src/Makefile.in
+	/bin/cp -p fixed/Makefile.in.Obit src/Obit/tasks/Makefile.in
 	./SETUP.Obit
 	export LD_LIBRARY_PATH="";cd src/Obit/python;make Obit
 	./SETUP.ObitTalk	
