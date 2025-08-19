@@ -84,3 +84,51 @@ cd $OBITBASE; git pull origin master
 Summary: Add -lm to tasks/Makefile.in
 cd $OBITBASE; git add changes.text 
 cd $OBITBASE; git add src/Obit/tasks/Makefile.in
+# Update changes
+git commit -F changes
+git push -v ObitBase master
+# Update local version
+cd $OBITBASE; git pull origin master
+
+18 Aug 2025
+Summary: Hacks for ubunto linker woes, sincos fixup, RHEL9 fixes
+  Makefile, SETUP.Obit, SETUP.ObitView,
+  fixed/configure.Obit fixed/configure.ObitView 
+    Ubuntu hacks, special configure scripts
+  fixed/autoconfig.stuff.tgz
+    modified filed needed to make configure
+  fixed/Makefile.in.ObitView.task fixed/Makefile.in.ObitView.src
+  fixed/Makefile.in.Obit.tasks
+    modified Makefiles
+  src/Obit/configure.ac src/Obit/tasks/Makefile.in
+  src/Obit/m4/cfitsio.m4 src/Obit/m4/gsl.m4 src/Obit/m4/plplot.m4 src/Obit/m4/python3.m4  src/Obit/m4/xmlrpc.m4
+  src/ObitView/configure.ac src/ObitView/Makefile.in src/ObitView/src/Makefile.in
+  src/ObitView/m4/xmlrpc.m4 src/ObitView/m4/obit.m4 
+    Ubuntu hacks packaged into fixed/autoconfig.stuff.tgz
+  copyFiles/readme copyFiles/dot.obitrc.py copyFiles/dot.obitrc_bin.py
+    Update ObitVersion
+
+# Gandalf  SHIT - this Must be maintained from smeagle - no git installation here.
+setenv OBITBASE /export/home/gandalf/bcotton/ssd/bcotton/Git/ObitBase
+setenv GitObitBase /export/raid/bcotton/ObitGitMaster/ObitBase
+# Smeagle
+setenv OBITBASE /export/ssd/bcotton/ssd/Git/ObitBase
+setenv GitObitBase /export/raid_2/bcotton/ObitGitMaster/ObitBase
+
+# Maintain github repository directly out of $OBITBASE
+# but maintain a copy in $GitObitBase
+cd $OBITBASE; /bin/cp -p Makefile SETUP.Obit SETUP.ObitView changes.text $GitObitBase
+git add SETUP.Obit SETUP.ObitView changes.text
+cd $OBITBASE/fixed/; /bin/cp -p configure.Obit configure.ObitView autoconfig.stuff.tgz $GitObitBase/fixed/
+git add  configure.Obit configure.ObitView autoconfig.stuff.tgz
+cd $OBITBASE/fixed/; /bin/cp -p Makefile.in.ObitView.tasks Makefile.in.ObitView.src $GitObitBase/fixed/
+git add  Makefile.in.ObitView.tasks Makefile.in.ObitView.src 
+cd $OBITBASE/fixed/; /bin/cp -p Makefile.in.Obit.tasks  $GitObitBase/fixed/
+git add Makefile.in.Obit.tasks
+cd $OBITBASE/copyfiles; /bin/cp -p readme dot.obitrc.py dot.obitrc_bin.py $GitObitBase/copyfiles 
+git add readmedot.obitrc.py dot.obitrc_bin.py 
+
+#Update changes.text
+cd $OBITBASE
+git commit -F changes.text
+git push -v ObitBase master
