@@ -34,7 +34,7 @@
 # Svn revision number, also fix readme, dot.obitrc_bin.py and dot.obitrc.py in copyFiles
 #set CPPFLAGS to set avx, e.g. setenv CPPFLAGS "-mavx -DHAVE_AVX=1" 
 # for distro set VTYPE to SSE, AVX, AVX2, AVX512
-ver = 672
+ver = 673
 vtype = $(VTYPE)
 disTarget := "Obit.$(VTYPE)-distro-1.1.$(ver).tar"
 all: dodeps target
@@ -61,7 +61,6 @@ target:
 	/bin/cp -p fixed/Makefile.in.Obit.tasks src/Obit/tasks/Makefile.in
 	/bin/cp -p fixed/Makefile.in.ObitView.tasks src/ObitView/Makefile.in
 	/bin/cp -p fixed/Makefile.in.ObitView.src src/ObitView/src/Makefile.in
-	/bin/cp -p fixed/Makefile.in.Obit src/Obit/tasks/Makefile.in
 	./SETUP.Obit
 	export LD_LIBRARY_PATH="";cd src/Obit/python;make Obit
 	./SETUP.ObitTalk	
@@ -85,7 +84,7 @@ upload:
 	scp -p distro/$(TARGET).gz smeagle.cv.nrao.edu:/users/bcotton/public_html/ObitBin/linux_distro/
 
 update:
-	cd src;git pull origin master
+	export LD_LIBRARY_PATH="";cd src;git pull origin master
 
 backup:
 	cd ..; tar czvf ObitBase_backup.tgz ObitBase
