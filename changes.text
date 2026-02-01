@@ -128,7 +128,19 @@ git add Makefile.in.Obit.tasks
 cd $OBITBASE/copyfiles; /bin/cp -p readme dot.obitrc.py dot.obitrc_bin.py $GitObitBase/copyfiles 
 git add readmedot.obitrc.py dot.obitrc_bin.py 
 
+###### RHEL9  Jan 2026
+Summary: bug fixes
+   template/bin/Basic
+     Fix OBITEXEC
+
+setenv OBITBASE /export/home/smeagle/bcotton/Git/ObitBase
+setenv GitObitBase /export/raid_2/bcotton/ObitGitMaster/ObitBase
+
+cd $OBITBASE; /bin/cp -p template/bin/Basic changes.text $GitObitBase
+git add template/bin/Basic changes.text
+
 #Update changes.text
 cd $OBITBASE
 git commit -F changes.text
 git push -v ObitBase master
+

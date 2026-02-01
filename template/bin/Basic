@@ -1,0 +1,57 @@
+#!/usr/bin/perl
+use File::Basename;
+use Cwd qw(abs_path getcwd);
+
+
+$installpath = abs_path(dirname(abs_path($0)) . "/..");
+$path        = normalize_path($installpath,$0);
+$binary      = basename($path);
+
+$ENV{PATH} = "$installpath/lib/obit/bin:$installpath/lib/python:$ENV{PATH}";
+$ENV{PYTHONPATH} = "$installpath/share/python:$ENV{PYTHONPATH}";
+$ENV{OBIT_ROOT} = $installpath;
+$ENV{OBITEXEC} = "$installpath/lib/Obit/";
+$ENV{PLPLOT_DRV_DIR} = "$installpath/lib/plplot/drivers";
+$ENV{PLPLOT_LIB}     = "$installpath/share/plplot";
+$ENV{LD_LIBRARY_PATH} = "$installpath/lib:$ENV{LD_LIBRARY_PATH}";
+
+exec("$installpath/lib/Obit/bin/$binary", @ARGV);
+
+
+sub normalize_path {
+    my $divider = '/';
+    my $root = shift(@_);        ## installation root
+    my $path = shift(@_);        ## path to script ($0)
+
+    sub normalize_worker {
+        # clean path
+        my @path = ( );
+        foreach my $e (@_) {
+            if ( $e eq '..' ) { pop(@path) }
+            elsif ( $e ne '.' ) {
+                my $path = join($divider,@path,$e);
+                # encountered symlink and still outside of installation directory
+                if ( -l $path && $path !~ m|^$root| ) {
+                    my $linkpath = readlink($path); 
+                    if ( substr($linkpath,0,1) eq $divider ) { 
+                        # link to an absolute path. Need to clear up existing path. 
+                        @path = ( ); 
+                    } 
+                    @path = normalize_worker(@path,split($divider,$linkpath)); 
+                } else {
+                    push(@path,$e);
+                }
+            }
+        }
+
+        # reconstruct path
+        return @path;
+    }
+
+    # relative path
+    if ( substr($path,0,1) ne $divider ) {
+        $path = getcwd( ) . $divider . $path;
+    }
+
+    return join('/', normalize_worker( split($divider,$path) ) );
+}
