@@ -1,8 +1,9 @@
              Obit Installation Kit
 
-   This directory contains the Obit source installation kit.  After
-untarring the contents where you would like it installed, the software
-can be built using one of the scripts in subdirectory scripts.
+Download the  Obit source installation kit contents via 
+% git clone https://github.com/bill-cotton/ObitBase/
+where you would like it installed.
+The software can be built using one of the scripts in subdirectory scripts.
   scripts/build_with_SSE     Use only SSE vector instructions
   scripts/build_with_AVX     Use also AVX vector instructions
   scripts/build_with_AVX2    Use also AVX2 vector instructions
@@ -18,9 +19,12 @@ If this produces a blank string, that option is not available.  Every
 interesting computer should have sse and most will have avx.
 
    The vector instruction set used in one of the
-scripts/build-with... will be written in file VeectorType as 'SSE',
+scripts/build-with... will be written in file VectorType as 'SSE',
 'AVX', AVX2 or 'AVX512. Alternatively, the instructions used in the
 last build can be seen in src/Obit/src/Makefile.
+
+   The installation will download to current version of the Obit
+software from github and use it to build the installation.
 
    This installation should leave executables in the bin directory:
   bin/ObitTalk  Python command line interface
@@ -30,21 +34,23 @@ last build can be seen in src/Obit/src/Makefile.
 
    There are also script templates in subdirectory scripts that can be
 edited to provide useful functionality, Edit lines marked "EDIT".
-  scripts/SetupObit.csh  Tcsh script defines environment variables.
+  scripts/SetupObit.(c)sh  (Tcsh)sh script defines environment variables.
                          This adds the bin directory to your path.
                          Copy, edit to provide details and execute it.
   scripts/dot.obitrc.py  Obit startup script that tells where various
                          parts of Obit and AIPS reside.
-                         Copy, edit to provide details and execute it.
-  
+                         Copy to .obitrc.py, edit to provide details.
+                         It will be invoked by ObitTalk from either your
+			 home directory or cwd.
+ 
    Various useful make functions:
    target: Build obit, uses $CPPFLAGS to set AVX flags,
            scripts/build_with_AVX? better.
    clean:  Delete the installation products.
            NOTE: this will also lose any modifications you have made,
            back them up.
-   update: Use subversion to update the version of Obit, follow this
-           by script/build_with??? to rebuild the software.
+   update: Update the version of Obit from github, follow this
+           by script/rebuild_with??? to rebuild the software.
    backup: Makes a gzipped tarball copy of the installation in
            ../ObitBase_backup.tgz. 
    distro: Makes binary distribution and tarball in distro, 
@@ -61,19 +67,26 @@ setenv CPPFLAGS "-mavx -DHAVE_AVX"
 setenv VTYPE "AVX"
 
   
-   This installation uses subversion (as svn) to access the Obit
-repository on GitHub for the latest version so you'll need this
-installed.  Several of the more troublesome third party libraries are
-included in this distribution but others will be searched for.  Any
-missing ones may have to be installed if their functionality is
-needed.  Not all are required to build.
-  curl      Network communication
+   This installation uses git access the Obit repository on GitHub for the 
+latest version so you'll need this installed.  Several of the more troublesome 
+third party libraries are included in this distribution but other libraries will 
+be searched for.  Any missing ones may have to be installed if their functionality
+is needed.  Not all are required to build.
+Included packages:
+  cfitsio  FITS format I/O 
+  curl     Network communication
+  plplot   Plotting package
+  xml2     XML package
+  xmlrpc   Interprocess communication via the xml/rpc protocol
+Major packages not included
   fftw3     Fast Fourier Transform package
   glib-2.0  Gnu library
   gsl       Gnu Scientific Library
   motif     X windows widgets for ObitView
   wvr       ALMA water vapor radiometer library
   zlib      Read gzip compressed files
+A more detailed list of software and libraries that might be needed is
+given in LibrariesNeeded.text.
 
 Obit Binary Distribution
 ------------------------
@@ -84,6 +97,36 @@ Vector type (SSE, AVX, AVX2 or AVX512) from the environment variable
 $VTYPE. This will leave a gzipped tarball in the distro directory.
 NB: Delete the old version before building a newer one.
 May need to set LD_LIBRARY_PATH if it's needed to run.
+The version ID in Makefile should be updated to give the current Obit
+version number.
+
+Running Obit
+------------
+   The command line interface (CLI) to Obit software is ObitTalk, or
+ObitTalk3 explicitly for python3.  This is basically python with some
+modules preloaded.  Obit functions and tasks are available from this
+python interface.
+
+   In order to run ObitTalk, you need to tell it where various software
+components and data directories are.  If you have an AIPS setup,
+Obit can follow the trail of breadcrumbs to find its data.  Otherwise,
+you'll need a .obitrc.py file, see discussion of scripts/dot.obitrc.py
+above. Defining and executing the SetupObit.(c)sh (see description
+above) may also be necessary.
+
+After Obit is installed and in your path, the python interface is
+brought up by 
+% ObitTalk (or ObitTalk3)
+This will ask for you AIPS user number (arbitrary) if you're using
+AIPS format data. It then executes the .obitrc.py file.
+The image viewer, ObitView is started independently:
+% ObitView &
+
+Documentation
+------------
+   User documentation for the CLI, ObitTalk, can be found in
+src/ObitTalk/doc/ObitTalk.pdf.  The most recent documentation is available
+from the Obit home page http://www.cv.nrao.edu/~bcotton/Obit.html.
 
 Troubleshooting:
 ---------------
@@ -92,7 +135,8 @@ In this case look at src/Obit/config.log which should say which
 external libraries are missing. Also check src/ObitTalk/config.log and 
 src/ObitView/config.log depending on what failed.
 
-  If one or the other of the ObitTalk scripts don't run properly,
+  If one or the other of the ObitTalk scripts (ObitTalk, ObitTalk3)
+don't run properly,
 % cd $OBITBASE/src/Obit/python; make Obit
 might fix it.
 
@@ -113,8 +157,8 @@ ImportError: obit/obit-1.1.669/share/python/_Obit.so: undefined symbol: PyInstan
 
 There are two _Obit*.so libraries:
 _Obit.so                               for python2
-_Obit.cpython-36m-x86_64-linux-gnu.so  for python3
-If you python is python3 (above example is python3.9.2), then renaming 
+_Obit.cpython-36m-x86_64-linux-gnu.so  for python3.6
+If your python is python3 (above example is python3.9.2), then renaming 
 _Obit.cpython-36m-x86_64-linux-gnu.so to _Obit.so may fix the problem.
 
-W. Cotton (bcotton@nrao.edu) Oct 2023
+W. Cotton (bcotton@nrao.edu) May 2025

@@ -12,19 +12,25 @@ export prefix=`pwd`
 export deps=${prefix}/deps
 
 #rm -rf ObitTalk
-#tar zxf ObitTalk.tar.gz
+#tar zxf ObitView.tar.gz
 export OBITSYSTEMPATH=`cd src && pwd`
 export OBIT=${OBITSYSTEMPATH}/Obit
-# LD_LIBRARY_PATH cripples python here
-export LD_LIBRARY_PATH=""
-echo "LD_LIBRARY_PATH $LD_LIBRARY_PATH"
+
 pushd src/ObitTalk
+# Hack configure to include plplot
+sed -i -e 's#-lObit# -lObit -lplplot#g' configure
+sed -i -e 's|-lxmlrpc_xmlparse||g' configure
+sed -i -e 's|-lxmlrpc_xmltok||g' configure
+sed -i -e 's|^#include <xmlrpc_server_abyss.h>||g' ./src/XMLRPCserver.c
+sed -i -e 's|^#include <xmlrpc_server_abyss.h>||g' ./src/XMLRPCTaskMessServer.c
+
+
 PATH=/usr/bin:$PATH
 ### automake et al. look for this...
 echo '#/bin/sh' > missing && echo 'exit 0' >> missing
-export PYTHONPATH=${OBIT}/python
-export LD_LIBRARY_PATH="${deps}/lib:$LD_LIBRARY_PATH" 
-CFLAGS="-I/usr/lib64/glib-2.0/include -I${deps}/include -I${OBIT}/include -I../Obit/include" LDFLAGS="-L${deps}/lib -L${OBIT}/lib -Wl,-rpath,${prefix}/lib:${deps}/lib:${OBIT}/lib" CURL_CFLAGS="-I/usr/include/curl" ./configure --with-plplot=${deps} --with-xmlrpc=${deps} --with-xmlrpc-includes=${deps}/include --enable-shared --prefix=${prefix} --libdir=${prefix}/lib --with-obit=${OBIT}
-make clean all install
-make install
+CFLAGS="-I/usr/lib64/glib-2.0/include -I${deps}/include -I${OBIT}/include" LDFLAGS="-L${deps}/lib -L${OBIT}/lib -L/usr/lib64 -Wl,-rpath,${prefix}/lib:${deps}/lib:${OBIT}/lib -lxmlrpc_server -lxmlrpc_abyss -lxmlrpc_client -lxml2 " ./configure  --with-Obit=${OBIT} --with-plplot=${deps} --with-xmlrpc=${deps} --with-cfitsio=${deps} --prefix=${prefix} --libdir=${prefix}/lib
+make clean all
+cp -p bin/ObitTalk ${prefix}/bin
+cp -p bin/ObitTalk3 ${prefix}/bin
+cp -p bin/ObitTalkServer ${prefix}/bin
 popd
